@@ -1,15 +1,47 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Minimalist Car Drift Game</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Simple Car Drift Game</title>
+  <style>
+    body { margin: 0; background: #111; overflow: hidden; }
+    canvas { display: block; margin: auto; background: #333; }
+  </style>
 </head>
 <body>
-    <h1>🏎️ Car Drift Challenge 🏎️</h1>
-    <canvas id="gameCanvas" width="800" height="500"></canvas>
-    <p id="score">Time: 0 seconds</p>
-    <script src="script.js"></script>
-</body>
-</html>
+<canvas id="gameCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let car = {
+    x: canvas.width/2,
+    y: canvas.height/2,
+    angle: 0,
+    speed: 0,
+    color: '#ff4444'
+};
+
+function drawCar() {
+    ctx.save();
+    ctx.translate(car.x, car.y);
+    ctx.rotate(car.angle);
+    ctx.fillStyle = car.color;
+    ctx.fillRect(-25, -12, 50, 25);
+    ctx.restore();
+}
+
+function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    car.x += Math.cos(car.angle) * car.speed;
+    car.y += Math.sin(car.angle) * car.speed;
+    drawCar();
+    requestAnimationFrame(update);
+}
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') car.speed = 5;
+    if (e.key === 'ArrowDown') car.speed =
